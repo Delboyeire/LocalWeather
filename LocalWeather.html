@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Days+One|Gloria+Hallelujah|Orbitron|Play" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://cdn.rawgit.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.min.js"></script>
+    <title>Random Quote Machine</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+        }
+
+        #temp{
+            font-size: x-large;
+            font-weight: bold;
+        }
+
+        #weather{
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width : 50%;
+
+        }
+    </style>
+    <script>
+        // Docs at http://simpleweatherjs.com
+
+        /* Where in the world are you? */
+        $('#js-geolocation').on('click', function() {
+            console.log("Click!");
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    loadWeather(position.coords.latitude+','+position.coords.longitude);
+                });
+            }
+        });
+
+
+        $(document).ready(function() {
+            loadWeather('Dublin',''); //@params location, woeid
+            $('#js-geolocation').on('click', function() {
+                console.log("Click!");
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        loadWeather(position.coords.latitude+','+position.coords.longitude);
+                    });
+                }
+            });
+
+        });
+
+        function loadWeather(location, woeid) {
+            $.simpleWeather({
+                location: location,
+                woeid: woeid,
+                unit: 'f',
+                success: function(weather) {
+                    $('#temp').html( '<i class="icon-'+weather.code+'"></i> <h1 class="display-1">'+weather.temp+'&deg;'+weather.units.temp + '</h1>');
+                    $('#region').html(weather.city+', '+weather.region);
+                    $('#current').html( weather.currently);
+                    $('#alt').html(weather.alt.temp+'&deg;C');
+                    if(weather.currently == "Cloudy"){
+                        $('body').css('background','url("http://www.aleqt.com/sites/default/files/rbitem/2017/05/8/614801-640480561.jpg") no-repeat center fixed ');
+                    }
+
+                    //$("#weather").html(html);
+                },
+                error: function(error) {
+                    $("#weather").html('<p>'+error+'</p>');
+                }
+            });
+        }
+
+
+
+
+
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+
+        <div id="weather" class="container-fluid text-center mt-5" >
+
+                <div class="row">
+                    <div id="temp" class="col align-self-center"></div>
+                </div>
+                <div class="row">
+                    <div id="region" class="col align-self-center"></div>
+                </div>
+                <div class="row">
+                    <div id="current" class="col align-self-center"></div>
+                </div>
+                <div class="row">
+                    <div id="alt" class="col align-self-center"></div>
+                </div>
+                <div class="row">
+                    <button id="js-geolocation" class="btn btn-primary col align-self-center mt-5" >Use Your Location</button>
+                </div>
+
+
+
+        </div>
+
+
+</div>
+
+</body>
+</html>
